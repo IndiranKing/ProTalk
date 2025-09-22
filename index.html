@@ -17,7 +17,7 @@
   .container { max-width: 850px; margin: auto; padding: 40px; text-align: center; }
   .hidden { display: none; }
 
-  /* Welcome and Rules Page */
+  /* Welcome & Rules Page */
   .welcome-box, .rules-box {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
@@ -53,32 +53,32 @@
     border: 3px solid #9b4dff;
     animation: pulseGlow 2s infinite alternate;
   }
-  h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-    padding: 15px;
-    border-radius: 12px;
-    border: 2px solid #f107a3;
-    box-shadow: inset 0 0 15px #f107a3, 0 0 20px #7b2ff7;
-    animation: pulseText 3s infinite alternate;
-  }
   .quiz-header {
     font-size: 22px;
     margin-bottom: 10px;
     color: #ffda6b;
     text-shadow: 0 0 8px #ff9800, 0 0 15px #ffda6b;
   }
+  h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid #f107a3;
+    box-shadow: inset 0 0 15px #f107a3, 0 0 20px #7b2ff7;
+    animation: pulseText 3s infinite alternate;
+  }
   .options {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    margin-top: 20px;
+    margin-top: 15px;
   }
   .option-btn {
     background: transparent;
     border: 2px solid #7b2ff7;
-    padding: 15px;
-    font-size: 18px;
+    padding: 12px;
+    font-size: 16px;
     border-radius: 12px;
     color: #fff;
     cursor: pointer;
@@ -101,34 +101,45 @@
     border-color: #ff5252;
   }
 
-  /* Circular Timer */
+  /* Circular Timer with Progress */
   #timerCircle {
-    width: 90px; height: 90px;
-    margin: 15px auto;
-    border-radius: 50%;
-    border: 6px solid #f107a3;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 0 0 10px #f107a3;
-    box-shadow: 0 0 20px #f107a3, 0 0 40px #7b2ff7;
-    animation: pulseGlow 1.5s infinite alternate;
+    position: relative;
+    width: 110px; height: 110px;
+    margin: 10px auto;
+  }
+  #timerSvg { transform: rotate(-90deg); }
+  #timerText {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px; font-weight: bold; color: #fff;
+    text-shadow: 0 0 6px #f107a3;
   }
 
-  /* Surprise Box */
-  .surprise-box {
-    margin-top: 20px;
-    padding: 20px;
+  /* Surprise Modal */
+  .modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 999;
+  }
+  .modal-content {
     background: rgba(255,255,255,0.1);
     border: 2px solid #ff9800;
     border-radius: 15px;
-    box-shadow: 0 0 25px #ff9800, 0 0 50px #ffda6b;
-    font-size: 18px;
-    animation: fadeIn 1.2s ease-in-out;
+    padding: 30px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 0 25px #ff9800, 0 0 60px #ffda6b;
+    animation: popUp 0.6s ease-out;
+  }
+  @keyframes popUp {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
   }
 
-  @keyframes fadeIn { from { opacity: 0; transform: scale(0.8);} to { opacity: 1; transform: scale(1);} }
   @keyframes pulseGlow {
     from { box-shadow: 0 0 15px #7b2ff7, 0 0 30px #f107a3; }
     to { box-shadow: 0 0 30px #f107a3, 0 0 60px #7b2ff7; }
@@ -148,14 +159,14 @@
     <!-- Welcome Page -->
     <div id="welcome" class="welcome-box">
       <h1>🎤 ProTalk - Grammar Superheroes Quiz 🦸</h1>
-      <p>Welcome to <b>Room 2</b>'s challenge! This quiz is about <b>Parts of Speech</b>.</p>
+      <p>Welcome to <b>Room 2 challenge</b></p>
+      <p>This quiz is about <b>Parts of Speech</b></p>
       <button onclick="showRules()">Start Quiz</button>
     </div>
 
     <!-- Rules Page -->
     <div id="rulesPage" class="hidden rules-box">
       <h2>📢 Instructions</h2>
-      <p>Dear participants, please follow these rules:</p>
       <ul style="text-align:left; display:inline-block;">
         <li>📷 Please <b>turn your camera on</b>.</li>
         <li>🤖 Do <b>NOT</b> use AI tools to find the answers.</li>
@@ -171,7 +182,14 @@
     <div id="quiz" class="hidden quiz-box">
       <div class="quiz-header">✨ Parts of Speech Quiz ✨</div>
       <div id="progress"></div>
-      <div id="timerCircle">40s</div>
+      <div id="timerCircle">
+        <svg id="timerSvg" width="110" height="110">
+          <circle cx="55" cy="55" r="50" stroke="#333" stroke-width="8" fill="none"></circle>
+          <circle id="progressCircle" cx="55" cy="55" r="50" stroke="#00ff88" stroke-width="8" fill="none"
+            stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="0"></circle>
+        </svg>
+        <div id="timerText">40s</div>
+      </div>
       <h2 id="question"></h2>
       <div class="options" id="options"></div>
       <p id="feedback"></p>
@@ -183,136 +201,95 @@
       <h2>🏆 Quiz Complete!</h2>
       <p id="score" style="font-weight:bold;"></p>
       <p id="message"></p>
+      <p><b>🙏 Thank you Shirley Wendy Yates for giving me the opportunity</b></p>
       <button onclick="restartQuiz()">Play Again</button>
       <button onclick="showSurprise()">Play More Quiz?</button>
-      <div id="surprise" class="hidden surprise-box">
+    </div>
+
+    <!-- Surprise Modal -->
+    <div id="surpriseModal" class="hidden modal">
+      <div class="modal-content">
         🎉 Questions complete! Go and do your office work 😄
+        <br><br>
+        <button onclick="closeSurprise()">Close</button>
       </div>
     </div>
   </div>
 
 <script>
-const questions = [
-  {q: "Which sentence contains a collective noun used incorrectly?", options: ["The flock of birds flew away.", "The team are arguing among themselves.", "The jury was divided in their opinions.", "The crowd cheers loudly."], answer: 2},
-  {q: "Identify the part of speech of the underlined word:\nShe spoke to me in a kind manner.", options: ["Adjective", "Adverb", "Noun", "Pronoun"], answer: 0},
-  {q: "Fill in with the correct article:\nI saw __ European tourist with __ honest guide near ___ Eiffel Tower.", options: ["a, an, the", "an, an, a", "a, a, the", "the, an, a"], answer: 0},
-  {q: "Spot the two different parts of speech for the word 'book'.", options: ["Verb & Adjective", "Verb & Noun", "Noun & Adverb", "Adjective & Pronoun"], answer: 1},
-  {q: "None of the money ___ stolen.", options: ["were", "was", "have been", "are"], answer: 1},
-  {q: "Find the mistake:\nHe is senior than me by three years.", options: ["Correct as it is", "Change 'than' to 'to'", "Change 'senior' to 'elder'", "Change 'me' to 'I'"], answer: 1},
-  {q: "Which sentence has an adverb of degree?", options: ["She sings beautifully.", "He almost finished the work.", "We met yesterday.", "The cat ran outside."], answer: 1},
-  {q: "In the sentence:\n'The poor must be helped.' what is 'poor'?", options: ["Adjective", "Adverb", "Adjective used as a Noun", "Pronoun"], answer: 2},
-  {q: "Choose the correct preposition:\nHe is married __ his cousin, who is related __ me ___ my mother’s side.", options: ["with, to, in", "to, to, on", "for, of, at", "to, with, on"], answer: 1},
-  {q: "Identify 'since' in each:\nI have not seen him since Monday. He has been sad since his failure. Since you are here, let’s start.", options: ["Preposition, Conjunction, Adverb", "Conjunction, Adverb, Preposition", "Adverb, Preposition, Conjunction", "Preposition, Adverb, Conjunction"], answer: 0},
-  {q: "Which of the following is NOT an interjection?", options: ["Alas!", "Hurrah!", "Bravo!", "Quickly!"], answer: 3},
-  {q: "Best interjection:\nYou drop your phone → __ | You win a prize → __ | You see a ghost → __", options: ["Oops, Hurrah, Ahh", "Ouch, Yay, Alas", "Wow, Bravo, Oops", "Phew, Alas, Hurrah"], answer: 0},
-  {q: "True or False:\nInterjections have grammatical connections with other words.", options: ["True", "False"], answer: 1},
-  {q: "Fill with a suitable interjection:\n___! That was close, I almost got hit by the car.", options: ["Ouch!", "Alas!", "Phew!", "Hurrah!"], answer: 2},
-  {q: "Arrange the interjections by emotion:\nBravo!, Alas!, Phew!, Ouch!, Hurray!", options: ["Bravo-praise, Alas-sadness, Phew-relief, Ouch-pain, Hurray-joy", "Bravo-joy, Alas-pain, Phew-sadness, Ouch-relief, Hurray-praise", "Alas-relief, Bravo-sadness, Ouch-praise, Hurray-pain, Phew-joy", "Hurray-sadness, Phew-joy, Bravo-pain, Alas-relief, Ouch-praise"], answer: 0},
-  {q: "In this dialogue, identify interjections:\n'Wow! You’re late again. Oops, I forgot my watch. Ah, never mind. Hurrah! The bus is still here!'", options: ["Wow, Oops, Ah, Hurrah", "Oops, Alas, Ah, Bravo", "Wow, Alas, Phew, Ouch", "Oops, Hurrah, Alas, Bravo"], answer: 0},
+const totalCircumference = 314; // 2πr for r=50
+let current=0, score=0, timer, timeLeft;
+const timeLimit = 40;
+const progressCircle=document.getElementById("progressCircle");
+
+function showRules(){document.getElementById("welcome").classList.add("hidden");document.getElementById("rulesPage").classList.remove("hidden");}
+function startQuiz(){document.getElementById("rulesPage").classList.add("hidden");document.getElementById("quiz").classList.remove("hidden");loadQuestion();}
+
+const questions=[
+ {q:"Which sentence contains a collective noun used incorrectly?",options:["The flock of birds flew away.","The team are arguing among themselves.","The jury was divided in their opinions.","The crowd cheers loudly."],answer:2},
+ {q:"Identify the part of speech of the underlined word:\nShe spoke to me in a kind manner.",options:["Adjective","Adverb","Noun","Pronoun"],answer:0},
+ {q:"Fill in with the correct article:\nI saw __ European tourist with __ honest guide near ___ Eiffel Tower.",options:["a, an, the","an, an, a","a, a, the","the, an, a"],answer:0},
+ // more questions...
 ];
 
-let current = 0;
-let score = 0;
-let timer;
-const timeLimit = 40; // 40 seconds
-let timeLeft = timeLimit;
-
-function showRules() {
-  document.getElementById("welcome").classList.add("hidden");
-  document.getElementById("rulesPage").classList.remove("hidden");
+function loadQuestion(){
+ const q=questions[current];
+ document.getElementById("progress").innerText=`Question ${current+1} of ${questions.length}`;
+ document.getElementById("question").innerText=q.q;
+ const optionsDiv=document.getElementById("options");
+ optionsDiv.innerHTML='';
+ q.options.forEach((opt,i)=>{
+   let btn=document.createElement("button");
+   btn.innerText=opt;btn.classList.add("option-btn");
+   btn.onclick=()=>checkAnswer(i,btn);
+   optionsDiv.appendChild(btn);
+ });
+ document.getElementById("feedback").innerText='';
+ document.getElementById("next-btn").classList.add("hidden");
+ startTimer();
 }
 
-function startQuiz() {
-  document.getElementById("rulesPage").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-  loadQuestion();
+function startTimer(){
+ clearInterval(timer);timeLeft=timeLimit;
+ document.getElementById("timerText").innerText=`${timeLeft}s`;
+ progressCircle.setAttribute("stroke-dasharray",totalCircumference);
+ progressCircle.setAttribute("stroke-dashoffset",0);
+ progressCircle.setAttribute("stroke","#00ff88");
+ timer=setInterval(()=>{
+   timeLeft--;
+   document.getElementById("timerText").innerText=`${timeLeft}s`;
+   let offset=(1-timeLeft/timeLimit)*totalCircumference;
+   progressCircle.setAttribute("stroke-dashoffset",offset);
+   if(timeLeft<15)progressCircle.setAttribute("stroke","#ff0000");
+   else if(timeLeft<30)progressCircle.setAttribute("stroke","#ff9800");
+   if(timeLeft<=0){clearInterval(timer);autoReveal();}
+ },1000);
 }
 
-function loadQuestion() {
-  const q = questions[current];
-  document.getElementById("progress").innerText = `Question ${current+1} of ${questions.length}`;
-  document.getElementById("question").innerText = q.q;
-  const optionsDiv = document.getElementById("options");
-  optionsDiv.innerHTML = '';
-  q.options.forEach((opt, i) => {
-    let btn = document.createElement("button");
-    btn.innerText = opt;
-    btn.classList.add("option-btn");
-    btn.onclick = () => checkAnswer(i, btn);
-    optionsDiv.appendChild(btn);
-  });
-  document.getElementById("feedback").innerText = '';
-  document.getElementById("next-btn").classList.add("hidden");
-  startTimer();
+function autoReveal(){
+ const q=questions[current];
+ const optionsDiv=document.getElementById("options");
+ document.getElementById("feedback").innerHTML='<span class="wrong">⌛ Time up! Correct answer highlighted.</span>';
+ optionsDiv.children[q.answer].classList.add("correct");
+ Array.from(optionsDiv.children).forEach(b=>b.disabled=true);
+ document.getElementById("next-btn").classList.remove("hidden");
 }
 
-function startTimer() {
-  clearInterval(timer);
-  timeLeft = timeLimit;
-  document.getElementById("timerCircle").innerText = `${timeLeft}s`;
-  timer = setInterval(() => {
-    timeLeft--;
-    document.getElementById("timerCircle").innerText = `${timeLeft}s`;
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      autoReveal();
-    }
-  }, 1000);
+function checkAnswer(i,btn){
+ clearInterval(timer);
+ const q=questions[current];
+ const optionsDiv=document.getElementById("options");
+ if(i===q.answer){btn.classList.add("correct");score++;document.getElementById("feedback").innerHTML='<span class="correct">✅ Correct!</span>';}
+ else{btn.classList.add("wrong");optionsDiv.children[q.answer].classList.add("correct");document.getElementById("feedback").innerHTML='<span class="wrong">❌ Wrong! Correct answer highlighted.</span>';}
+ Array.from(optionsDiv.children).forEach(b=>b.disabled=true);
+ document.getElementById("next-btn").classList.remove("hidden");
 }
 
-function autoReveal() {
-  const q = questions[current];
-  const optionsDiv = document.getElementById("options");
-  document.getElementById("feedback").innerHTML = '<span class="wrong">⌛ Time up! Correct answer highlighted.</span>';
-  optionsDiv.children[q.answer].classList.add("correct");
-  Array.from(optionsDiv.children).forEach(b => b.disabled = true);
-  document.getElementById("next-btn").classList.remove("hidden");
-}
-
-function checkAnswer(i, btn) {
-  clearInterval(timer);
-  const q = questions[current];
-  const feedback = document.getElementById("feedback");
-  const optionsDiv = document.getElementById("options");
-  if (i === q.answer) {
-    feedback.innerHTML = '<span class="correct">✅ Correct!</span>';
-    btn.classList.add("correct");
-    score++;
-  } else {
-    feedback.innerHTML = '<span class="wrong">❌ Wrong! Correct answer highlighted.</span>';
-    btn.classList.add("wrong");
-    optionsDiv.children[q.answer].classList.add("correct");
-  }
-  Array.from(optionsDiv.children).forEach(b => b.disabled = true);
-  document.getElementById("next-btn").classList.remove("hidden");
-}
-
-function nextQuestion() {
-  current++;
-  if (current < questions.length) {
-    loadQuestion();
-  } else {
-    showResult();
-  }
-}
-
-function showResult() {
-  document.getElementById("quiz").classList.add("hidden");
-  document.getElementById("result").classList.remove("hidden");
-  document.getElementById("score").innerText = `You scored ${score} out of ${questions.length}`;
-  document.getElementById("message").innerText = score === questions.length ? "🌟 Grammar Superhero! You nailed it!" : "Keep training, young hero!";
-}
-
-function restartQuiz() {
-  current = 0;
-  score = 0;
-  document.getElementById("result").classList.add("hidden");
-  document.getElementById("welcome").classList.remove("hidden");
-}
-
-function showSurprise() {
-  document.getElementById("surprise").classList.remove("hidden");
-}
+function nextQuestion(){current++;if(current<questions.length){loadQuestion();}else{showResult();}}
+function showResult(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.remove("hidden");document.getElementById("score").innerText=`You scored ${score} out of ${questions.length}`;document.getElementById("message").innerText=score===questions.length?"🌟 Grammar Superhero! You nailed it!":"Keep training, young hero!";}
+function restartQuiz(){current=0;score=0;document.getElementById("result").classList.add("hidden");document.getElementById("welcome").classList.remove("hidden");}
+function showSurprise(){document.getElementById("surpriseModal").classList.remove("hidden");}
+function closeSurprise(){document.getElementById("surpriseModal").classList.add("hidden");}
 </script>
 </body>
 </html>
