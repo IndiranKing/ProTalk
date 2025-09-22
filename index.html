@@ -14,7 +14,7 @@
     align-items: center;
     height: 100vh;
   }
-  .container { max-width: 800px; margin: auto; padding: 40px; text-align: center; }
+  .container { max-width: 850px; margin: auto; padding: 40px; text-align: center; }
   .hidden { display: none; }
 
   /* Welcome and Rules Page */
@@ -100,13 +100,35 @@
     box-shadow: 0 0 20px #ff1744, 0 0 40px #d50000 !important;
     border-color: #ff5252;
   }
-  #timer {
-    font-size: 20px;
-    margin: 15px 0;
-    color: #ff5252;
-    text-shadow: 0 0 10px #ff5252, 0 0 20px #f107a3;
-    animation: pulseText 1.5s infinite alternate;
+
+  /* Circular Timer */
+  #timerCircle {
+    width: 90px; height: 90px;
+    margin: 15px auto;
+    border-radius: 50%;
+    border: 6px solid #f107a3;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 10px #f107a3;
+    box-shadow: 0 0 20px #f107a3, 0 0 40px #7b2ff7;
+    animation: pulseGlow 1.5s infinite alternate;
   }
+
+  /* Surprise Box */
+  .surprise-box {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid #ff9800;
+    border-radius: 15px;
+    box-shadow: 0 0 25px #ff9800, 0 0 50px #ffda6b;
+    font-size: 18px;
+    animation: fadeIn 1.2s ease-in-out;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.8);} to { opacity: 1; transform: scale(1);} }
   @keyframes pulseGlow {
     from { box-shadow: 0 0 15px #7b2ff7, 0 0 30px #f107a3; }
     to { box-shadow: 0 0 30px #f107a3, 0 0 60px #7b2ff7; }
@@ -138,15 +160,18 @@
         <li>📷 Please <b>turn your camera on</b>.</li>
         <li>🤖 Do <b>NOT</b> use AI tools to find the answers.</li>
         <li>🧠 Use your own brain and enjoy the challenge!</li>
+        <li>⏳ Each question must be answered within <b>40 seconds</b>.</li>
       </ul>
-      <button onclick="startQuiz()">I Agree 👍</button>
+      <div style="margin-top:30px;">
+        <button onclick="startQuiz()">I Agree 👍</button>
+      </div>
     </div>
 
     <!-- Quiz Page -->
     <div id="quiz" class="hidden quiz-box">
       <div class="quiz-header">✨ Parts of Speech Quiz ✨</div>
       <div id="progress"></div>
-      <div id="timer"></div>
+      <div id="timerCircle">40s</div>
       <h2 id="question"></h2>
       <div class="options" id="options"></div>
       <p id="feedback"></p>
@@ -156,13 +181,13 @@
     <!-- Result Page -->
     <div id="result" class="hidden result-box">
       <h2>🏆 Quiz Complete!</h2>
-      <p id="score"></p>
+      <p id="score" style="font-weight:bold;"></p>
       <p id="message"></p>
-      <p style="margin-top:20px; font-size:18px; color:#ffda6b; text-shadow:0 0 10px #ff9800;">
-        🙏 Thank you for giving me the opportunity.<br>
-        Special thanks to our teacher <b>Shirley Wendy Yates</b>.
-      </p>
       <button onclick="restartQuiz()">Play Again</button>
+      <button onclick="showSurprise()">Play More Quiz?</button>
+      <div id="surprise" class="hidden surprise-box">
+        🎉 Questions complete! Go and do your office work 😄
+      </div>
     </div>
   </div>
 
@@ -189,7 +214,7 @@ const questions = [
 let current = 0;
 let score = 0;
 let timer;
-const timeLimit = 20; // 20 seconds per question
+const timeLimit = 40; // 40 seconds
 let timeLeft = timeLimit;
 
 function showRules() {
@@ -224,10 +249,10 @@ function loadQuestion() {
 function startTimer() {
   clearInterval(timer);
   timeLeft = timeLimit;
-  document.getElementById("timer").innerText = `⏳ Time Left: ${timeLeft}s`;
+  document.getElementById("timerCircle").innerText = `${timeLeft}s`;
   timer = setInterval(() => {
     timeLeft--;
-    document.getElementById("timer").innerText = `⏳ Time Left: ${timeLeft}s`;
+    document.getElementById("timerCircle").innerText = `${timeLeft}s`;
     if (timeLeft <= 0) {
       clearInterval(timer);
       autoReveal();
@@ -283,6 +308,10 @@ function restartQuiz() {
   score = 0;
   document.getElementById("result").classList.add("hidden");
   document.getElementById("welcome").classList.remove("hidden");
+}
+
+function showSurprise() {
+  document.getElementById("surprise").classList.remove("hidden");
 }
 </script>
 </body>
